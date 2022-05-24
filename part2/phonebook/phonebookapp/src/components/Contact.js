@@ -1,8 +1,8 @@
 import React from 'react';
 
-export default function Contact({ name, tel, key }) {
+export default function Contact({ name, tel }) {
 	return (
-		<p key={key}>
+		<p>
 			{name} {tel}
 		</p>
 	);
