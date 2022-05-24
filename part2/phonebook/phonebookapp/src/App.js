@@ -1,19 +1,23 @@
-import { useState } from 'react';
-import AddContact from './components/AddContact';
-import Contact from './components/Contact';
-import Header from './components/Header';
-import Search from './components/Search';
+import { useState, useEffect } from 'react';
+import AddContact from '../../../../../tester/src/components/AddContact';
+import Contact from '../../../../../tester/src/components/Contact';
+import Header from '../../../../../tester/src/components/Header';
+import Search from '../../../../../tester/src/components/Search';
+import axios from 'axios';
 
 const App = () => {
-	const [persons, setPersons] = useState([
-		{ name: 'Arto Hellas', tel: '040-123456', id: 1 },
-		{ name: 'Ada Lovelace', tel: '39-44-5323523', id: 2 },
-		{ name: 'Dan Abramov', tel: '12-43-234345', id: 3 },
-		{ name: 'Mary Poppendieck', tel: '39-23-6423122', id: 4 },
-	]);
+	const [persons, setPersons] = useState([]);
 	const [newName, setNewName] = useState('');
 	const [newNumber, setNewNumber] = useState('');
 	const [search, setSearch] = useState('');
+
+	useEffect(()=> {
+		axios
+			.get("http://localhost:3001/persons")
+			.then(res => {
+				setPersons(res.data);
+			})
+	}, [])
 
 	const handleChange = (e) => {
 		setNewName(e.target.value);
@@ -52,7 +56,7 @@ const App = () => {
 			<Header name={'Numbers'} />
 			{persons.map((person) => {
 				if (person.name.toLowerCase().includes(search)) {
-					return <Contact name={person.name} tel={person.tel} key={person.name}/>
+					return <Contact name={person.name} tel={person.number} key={person.name}/>
 				}
 			})}
 		</div>
