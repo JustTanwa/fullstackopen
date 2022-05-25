@@ -1,25 +1,16 @@
-import React from 'react';
 import Country from './Country';
+import CountryListItem from './CountryListItem';
 
 export default function Countries({ countries }) {
-	const getLangArray = (langObj) => {
-		let languages = [];
-		for (let langKey in langObj) {
-			languages.push(langObj[langKey]);
-		}
-		return languages;
-	};
-
 	if (countries.length === 1) {
 		const country = countries[0];
-		const languages = getLangArray(country.languages);
 		return (
 			<Country
 				name={country.name.common}
 				capital={country.capital}
 				area={country.area}
 				flag={country.flags.png}
-				languages={languages}
+				languages={country.languages}
 			/>
 		);
 	} else if (countries.length === 0) {
@@ -28,9 +19,7 @@ export default function Countries({ countries }) {
 		return (
 			<>
 				{countries.map((country) => (
-					<p key={country.name.common}>
-						{country.name.common}
-					</p>
+					<CountryListItem key={country.name.common} country={country} />
 				))}
 			</>
 		);
