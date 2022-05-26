@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import AddContact from '../../../../../tester/src/components/AddContact';
-import Contact from '../../../../../tester/src/components/Contact';
-import Header from '../../../../../tester/src/components/Header';
-import Search from '../../../../../tester/src/components/Search';
+import AddContact from './components/AddContact';
+import Contact from './components/Contact';
+import Header from './components/Header';
+import Search from './components/Search';
 import axios from 'axios';
 
 const App = () => {
