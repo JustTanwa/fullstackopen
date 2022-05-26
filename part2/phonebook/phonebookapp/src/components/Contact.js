@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function Contact({ name, tel }) {
+export default function Contact({ name, tel, handleDelete }) {
 	return (
 		<p>
-			{name} {tel}
+			{name} {tel} <button onClick={handleDelete}>delete</button>
 		</p>
 	);
 }
