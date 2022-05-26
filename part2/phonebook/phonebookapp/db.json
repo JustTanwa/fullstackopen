@@ -34,6 +34,21 @@
       "name": "Stanley Hudson",
       "number": "040-1211111",
       "id": 8
+    },
+    {
+      "name": "Pam Beesly",
+      "number": "040-1232585",
+      "id": 9
+    },
+    {
+      "name": "dwight schrute",
+      "number": "05-85974621",
+      "id": 10
+    },
+    {
+      "name": "Jim Halpert",
+      "number": "123456987",
+      "id": 11
     }
   ]
 }

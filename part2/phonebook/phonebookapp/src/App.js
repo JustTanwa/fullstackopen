@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import AddContact from './components/AddContact';
 import Contact from './components/Contact';
 import Header from './components/Header';
+import Notification from './components/Notification';
 import Search from './components/Search';
 import personServices from './services/persons';
 
@@ -10,6 +11,8 @@ const App = () => {
 	const [newName, setNewName] = useState('');
 	const [newNumber, setNewNumber] = useState('');
 	const [search, setSearch] = useState('');
+	const [message, setMessage] = useState(null);
+	const [messageStyle, setMessageStyle] = useState('success');
 
 	useEffect(() => {
 		personServices.getAll().then((allPersons) => setPersons(allPersons));
@@ -38,13 +41,33 @@ const App = () => {
 				const id = persons.filter(
 					(person) => person.name.toLowerCase() === newName.toLowerCase()
 				)[0].id;
-				console.log(id);
 				const updatedObj = { name: newName, number: newNumber };
-				personServices.update(id, updatedObj).then((updatedPerson) => {
-					setPersons(
-						persons.map((person) => (person.id !== id ? person : updatedPerson))
-					);
-				});
+				personServices
+					.update(id, updatedObj)
+					.then((updatedPerson) => {
+						setPersons(
+							persons.map((person) =>
+								person.id !== id ? person : updatedPerson
+							)
+						);
+						setNewName('');
+						setNewNumber('');
+
+						setMessage(`${newName} was successfully updated.`);
+						setTimeout(() => {
+							setMessage(null);
+						}, 2000);
+					})
+					.catch((error) => {
+						console.log('failed');
+						setMessage(
+							`Information of ${newName} has already been removed from server.`
+						);
+						setMessageStyle('failed');
+						setTimeout(() => {
+							setMessage(null);
+						}, 2000);
+					});
 			}
 		} else {
 			const contactObj = {
@@ -57,6 +80,12 @@ const App = () => {
 				setNewName('');
 				setNewNumber('');
 			});
+
+			setMessage(`${newName} was successfully added.`);
+			setMessageStyle('success');
+			setTimeout(() => {
+				setMessage(null);
+			}, 2000);
 		}
 	};
 
@@ -75,6 +104,7 @@ const App = () => {
 	return (
 		<div>
 			<Header name={'Phonebook'} />
+			<Notification message={message} messageStyle={messageStyle} />
 			<Search onChange={handleFilter} />
 			<Header name={'Add a new'} />
 			<AddContact
@@ -96,6 +126,7 @@ const App = () => {
 						/>
 					);
 				}
+				return null;
 			})}
 		</div>
 	);
