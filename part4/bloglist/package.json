@@ -1,0 +1,26 @@
+{
+  "name": "blog-list",
+  "version": "1.0.0",
+  "description": "fso exercise creating a blog list",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest --verbose"
+  },
+  "author": "Tanwa Sripan",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.5"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0",
+    "nodemon": "^2.0.16"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
