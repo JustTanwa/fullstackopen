@@ -106,6 +106,32 @@ describe('POST requests', () => {
   });
 });
 
+describe('DELETE requests', () => {
+  test('of a single blog post resource by id is successful', async () => {
+    const response = await api.get('/api/blogs');
+    const blogID = response.body[0].id;
+
+    await api.delete(`/api/blogs/${blogID}`).expect(204);
+  });
+});
+
+describe('PUT requests', () => {
+  test('of an existing blog resource is successful updated', async () => {
+    const response = await api.get('/api/blogs');
+    const blogToUpdate = response.body[1];
+
+    blogToUpdate.likes = 500;
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200);
+
+    const updatedBlog = await api.get(`/api/blogs/${blogToUpdate.id}`);
+
+    expect(updatedBlog.body.likes).toBe(500);
+  });
+});
 afterAll(() => {
   mongoose.connection.close();
 });
