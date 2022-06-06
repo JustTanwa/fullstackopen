@@ -132,6 +132,7 @@ describe('PUT requests', () => {
     expect(updatedBlog.body.likes).toBe(500);
   });
 });
+
 afterAll(() => {
   mongoose.connection.close();
 });

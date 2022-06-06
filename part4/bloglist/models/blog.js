@@ -17,6 +17,10 @@ const blogSchema = new mongoose.Schema({
   author: String,
   url: String,
   likes: { type: Number, default: 0 },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 // remove _id and __version field when sending json data
