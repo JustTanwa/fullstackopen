@@ -15,7 +15,7 @@ usersRouter.post('/', async (request, response, next) => {
   }
 
   const userExists = await User.find({username: username})
-  if (userExists) {
+  if (userExists.length !== 0) {
     return response.status(400).json({error: "username not available"})
   }
 
@@ -27,6 +27,7 @@ usersRouter.post('/', async (request, response, next) => {
     name,
     passwordHash,
   });
+
   try {
     const savedUser = await user.save();
 
