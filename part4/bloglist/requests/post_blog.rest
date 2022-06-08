@@ -1,0 +1,34 @@
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+
+{
+    "title": "JavaScript - Conditional Operator",
+    "author": "Tanwa Sripan",
+    "url": "https://dev.to/justtanwa/javascript-conditional-operator-594f",
+    "likes": 8
+}
+
+### 
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3Rlcm9uZSIsImlkIjoiNjI5ZjljNWUxZDA3MWE0Y2NlNWViOTE5IiwiaWF0IjoxNjU0NzE4MjQ0fQ.Alc3kxEg8_bKGp4Gt60nex-OY22WR6-CBe1eLdKhlxs
+
+{
+    "title": "Token Authentication",
+    "author": "Full stack",
+    "url": "https://fullstackopen.com/en/part4/token_authentication",
+    "likes": 888
+}
+
+### 
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pY2tqYWdlciIsImlkIjoiNjI5ZjljNGExZDA3MWE0Y2NlNWViOTE2IiwiaWF0IjoxNjU0NzIwOTI0fQ.lCyB6COVALUXSEgCEJ9g9qup9JTEbcpndUuuaoP6dyo
+
+{
+    "title": "Token Authentication",
+    "author": "mluukkai",
+    "url": "https://fullstackopen.com/en/part4/token_authentication",
+    "likes": 888
+}
+
