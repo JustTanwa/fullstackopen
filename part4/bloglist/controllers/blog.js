@@ -1,7 +1,24 @@
 const blogRouter = require('express').Router();
 const Blog = require('../models/blog');
 const User = require('../models/user');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+
+const userExtractor = async (request, response, next) => {
+  try {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
+    
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' });
+    }
+    const user = await User.findById(decodedToken.id);
+
+    request.user = user;
+
+    next();
+  } catch (exception) {
+    next(exception);
+  }
+};
 
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { blogs: 0 });
@@ -17,22 +34,15 @@ blogRouter.get('/:id', async (request, response, next) => {
   }
 });
 
-blogRouter.post('/', async (request, response, next) => {
+blogRouter.post('/', userExtractor, async (request, response, next) => {
   if (!request.body.title || !request.body.url) {
     response.status(400).end();
   }
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-
-  const user = await User.findById(decodedToken.id);
-
-  const blog = new Blog({ ...request.body, user: user._id });
-
   try {
+    const user = request.user;
+
+    const blog = new Blog({ ...request.body, user: user._id });
     const result = await blog.save();
     user.blogs = user.blogs.concat(result._id);
     await user.save();
@@ -42,12 +52,20 @@ blogRouter.post('/', async (request, response, next) => {
   }
 });
 
-blogRouter.delete('/:id', async (request, response, next) => {
+blogRouter.delete('/:id', userExtractor, async (request, response, next) => {
   const blogID = request.params.id;
-
   try {
-    await Blog.findByIdAndRemove(blogID);
-    response.status(204).end();
+    const user = request.user;
+    const blogToRemove = await Blog.findById(blogID);
+
+    if (blogToRemove.user.toString() === user.id) {
+      await Blog.findByIdAndRemove(blogID);
+      return response.status(204).end();
+    }
+
+    response
+      .status(401)
+      .json({ error: 'user does not have permission to delete blog' });
   } catch (exception) {
     next(exception);
   }

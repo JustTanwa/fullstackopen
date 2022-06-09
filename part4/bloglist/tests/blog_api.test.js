@@ -3,18 +3,28 @@ const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 const Blog = require('../models/blog');
+const jwt = require('jsonwebtoken');
+
+const initUser = {
+  username: 'tester',
+  id: '62a21e956185998eb1d8967e',
+};
+
+const token = jwt.sign(initUser, process.env.SECRET);
 
 const initialBlogs = [
   {
     title: 'Test title 1',
     author: 'Robot John',
     url: 'www.example.com',
+    user: initUser.id,
     likes: 5,
   },
   {
     title: 'Test title 2',
     author: 'Robot Jan',
     url: 'www.example.com/article',
+    user: initUser.id,
     likes: 3,
   },
 ];
@@ -56,7 +66,7 @@ describe('GET requests', () => {
 });
 
 describe('POST requests', () => {
-  test('of a new blog list can be added', async () => {
+  test('of a new blog list with a valid token gets added', async () => {
     const newBlog = {
       title: 'How to learn to code',
       author: 'Robot Jim',
@@ -67,6 +77,7 @@ describe('POST requests', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set({ Authorization: `bearer ${token}` })
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
@@ -78,7 +89,18 @@ describe('POST requests', () => {
     expect(titles).toContain('How to learn to code');
   });
 
-  test('of a new blog without likes will default to 0', async () => {
+  test('of a new blog list without token gets error', async () => {
+    const newBlog = {
+      title: 'How to learn to code',
+      author: 'Robot Jim',
+      url: 'www.freecodecamp.com',
+      likes: 10,
+    };
+
+    await api.post('/api/blogs').send(newBlog).expect(401);
+  });
+
+  test('of a new blog without likes will default to 0 with token', async () => {
     const newBlog = {
       title: 'How to learn to code',
       author: 'Robot Jim',
@@ -88,6 +110,7 @@ describe('POST requests', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set({ Authorization: `bearer ${token}` })
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
@@ -96,22 +119,29 @@ describe('POST requests', () => {
     expect(response.body[2].likes).toBe(0);
   });
 
-  test('of a new blog without title or url return a 400 Bad Request', async () => {
+  test('of a new blog without title or url return a 400 Bad Request with valid token', async () => {
     const newBlog = {
       title: 'Tester 3',
       author: 'Robot Jim',
     };
 
-    await api.post('/api/blogs').send(newBlog).expect(400);
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set({ Authorization: `bearer ${token}` })
+      .expect(400);
   });
 });
 
 describe('DELETE requests', () => {
-  test('of a single blog post resource by id is successful', async () => {
+  test('of a single blog post resource by id is successful with valid token', async () => {
     const response = await api.get('/api/blogs');
     const blogID = response.body[0].id;
 
-    await api.delete(`/api/blogs/${blogID}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogID}`)
+      .set({ Authorization: `bearer ${token}` })
+      .expect(204);
   });
 });
 

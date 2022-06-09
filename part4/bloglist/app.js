@@ -10,6 +10,8 @@ const tokenExtractor = (request, response, next) => {
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     const token = authorization.substring(7);
     request.token = token;
+  } else {
+    request.token = null;
   }
 
   next();
@@ -31,8 +33,8 @@ const errorHandler = (error, _request, response, next) => {
     return response.status(400).json({ error: error.message });
   } else if (error.name === 'JsonWebTokenError') {
     return response.status(401).json({
-      error: 'invalid token'
-    })
+      error: 'invalid token',
+    });
   }
 
   next(error);
