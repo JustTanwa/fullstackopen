@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const userExtractor = async (request, response, next) => {
   try {
     const decodedToken = jwt.verify(request.token, process.env.SECRET);
-    
+
     if (!decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' });
     }
@@ -36,7 +36,7 @@ blogRouter.get('/:id', async (request, response, next) => {
 
 blogRouter.post('/', userExtractor, async (request, response, next) => {
   if (!request.body.title || !request.body.url) {
-    response.status(400).end();
+    return response.status(400).json({ error: 'title or url is missing' });
   }
 
   try {
