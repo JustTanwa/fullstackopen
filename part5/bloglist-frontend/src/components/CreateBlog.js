@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import blogService from '../services/blogs';
 
-export default function CreateBlog({ creationError, updateBlogs }) {
+export default function CreateBlog({ creationError, updateBlogs, createRef }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
@@ -17,6 +17,9 @@ export default function CreateBlog({ creationError, updateBlogs }) {
         message: `a new blog ${blog.title} by ${blog.author} added`,
         style: 'success',
       });
+
+      createRef.current.toggleVisibility();
+      
       updateBlogs((prev) => prev.concat(blog));
       setTimeout(() => {
         creationError(null);
@@ -64,7 +67,7 @@ export default function CreateBlog({ creationError, updateBlogs }) {
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type='submit'>Create</button>
+        <button type='submit'>create</button>
       </form>
     </div>
   );
