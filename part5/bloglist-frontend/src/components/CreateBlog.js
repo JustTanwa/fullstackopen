@@ -19,7 +19,6 @@ export default function CreateBlog({ creationError, updateBlogs, createRef }) {
       });
 
       createRef.current.toggleVisibility();
-      
       updateBlogs((prev) => prev.concat(blog));
       setTimeout(() => {
         creationError(null);

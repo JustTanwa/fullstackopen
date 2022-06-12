@@ -24,7 +24,9 @@ export default function Login({ setUser }) {
       setUsername('');
       setPassword('');
     } catch (exception) {
-      setErrorMessage("Unable to log in, please check your username and/or password");
+      setErrorMessage(
+        'Unable to log in, please check your username and/or password'
+      );
       setTimeout(() => {
         setErrorMessage(null);
       }, 3000);
