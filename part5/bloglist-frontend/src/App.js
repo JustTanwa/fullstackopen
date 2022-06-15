@@ -59,6 +59,15 @@ const App = () => {
     }
   };
 
+  const handleSubmitBlog = async (blogObj) => {
+    const blog = await blogService.create({
+      title: blogObj.title,
+      author: blogObj.author,
+      url: blogObj.url,
+    });
+    setBlogs((prev) => prev.concat(blog));
+  };
+
   return (
     <div>
       {user === null ? (
@@ -78,8 +87,8 @@ const App = () => {
           </p>
           <Togglable buttonLabel='create new blog' ref={createNoteRef}>
             <CreateBlog
+              handleSubmit={handleSubmitBlog}
               creationError={setCreateError}
-              updateBlogs={setBlogs}
               createRef={createNoteRef}
             />
           </Togglable>

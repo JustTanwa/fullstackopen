@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import blogService from '../services/blogs';
 
-export default function CreateBlog({ creationError, updateBlogs, createRef }) {
+export default function CreateBlog({ creationError, createRef, handleSubmit }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
@@ -9,24 +8,24 @@ export default function CreateBlog({ creationError, updateBlogs, createRef }) {
   const createNewBlog = async (event) => {
     event.preventDefault();
     try {
-      const blog = await blogService.create({ title, author, url });
+      handleSubmit({ title, author, url });
       setAuthor('');
       setTitle('');
       setUrl('');
       creationError({
-        message: `a new blog ${blog.title} by ${blog.author} added`,
+        message: `a new blog ${title} by ${author} added`,
         style: 'success',
       });
 
       createRef.current.toggleVisibility();
-      updateBlogs((prev) => prev.concat(blog));
+
       setTimeout(() => {
         creationError(null);
       }, 3000);
     } catch (error) {
-      console.log(error.response.data.error);
+      const message = error.response?.data.error || "Error";
       creationError({
-        message: error.response.data.error,
+        message,
         style: 'failed',
       });
       setTimeout(() => {
@@ -46,6 +45,7 @@ export default function CreateBlog({ creationError, updateBlogs, createRef }) {
             name='title'
             value={title}
             onChange={({ target }) => setTitle(target.value)}
+            placeholder='Title of the blog'
           />
         </div>
         <div className='input-group'>
@@ -55,6 +55,7 @@ export default function CreateBlog({ creationError, updateBlogs, createRef }) {
             name='author'
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
+            placeholder='Author of the blog'
           />
         </div>
         <div className='input-group'>
@@ -64,6 +65,7 @@ export default function CreateBlog({ creationError, updateBlogs, createRef }) {
             name='url'
             value={url}
             onChange={({ target }) => setUrl(target.value)}
+            placeholder='Url of the blog'
           />
         </div>
         <button type='submit'>create</button>
