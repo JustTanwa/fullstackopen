@@ -44,6 +44,13 @@ blogRouter.post('/', userExtractor, async (request, response, next) => {
 
     const blog = new Blog({ ...request.body, user: user._id });
     const result = await blog.save();
+    Blog.populate(result, {path: "user", function(err, result) {
+      if (!err) {
+        console.log(result);
+      } else {
+        console.error(err)
+      }
+    }})
     user.blogs = user.blogs.concat(result._id);
     await user.save();
     response.status(201).json(result);
@@ -71,27 +78,30 @@ blogRouter.delete('/:id', userExtractor, async (request, response, next) => {
   }
 });
 
-blogRouter.put('/:id', async (request, response) => {
+blogRouter.put('/:id', async (request, response, next) => {
   const blogID = request.params.id;
-
   const blogResourceToUpdate = {
     title: request.body.title,
     author: request.body.author,
     url: request.body.url,
     likes: request.body.likes,
+    user: request.body.user.id,
   };
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      blogID,
+      blogResourceToUpdate,
+      {
+        new: true,
+        runValidators: true,
+        context: 'query',
+      }
+    ).populate('user', { blogs: 0 });
 
-  const updatedBlog = await Blog.findByIdAndUpdate(
-    blogID,
-    blogResourceToUpdate,
-    {
-      new: true,
-      runValidators: true,
-      context: 'query',
-    }
-  );
-
-  response.json(updatedBlog);
+    response.json(updatedBlog);
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = blogRouter;
