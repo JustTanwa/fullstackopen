@@ -77,7 +77,7 @@ describe('Blog app', function () {
       cy.get('.blogItem').should('not.exist');
     });
 
-    it.only('Blogs are ordered according to likes', function () {
+    it('Blogs are ordered according to likes', function () {
       cy.createBlog({
         title: 'least liked blog',
         author: 'john',
