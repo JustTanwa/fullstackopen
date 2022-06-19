@@ -23,7 +23,7 @@ export default function CreateBlog({ creationError, createRef, handleSubmit }) {
         creationError(null);
       }, 3000);
     } catch (error) {
-      const message = error.response?.data.error || "Error";
+      const message = error.response?.data.error || 'Error';
       creationError({
         message,
         style: 'failed',
@@ -43,6 +43,7 @@ export default function CreateBlog({ creationError, createRef, handleSubmit }) {
           <input
             type='text'
             name='title'
+            id='title'
             value={title}
             onChange={({ target }) => setTitle(target.value)}
             placeholder='Title of the blog'
@@ -53,6 +54,7 @@ export default function CreateBlog({ creationError, createRef, handleSubmit }) {
           <input
             type='text'
             name='author'
+            id='author'
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
             placeholder='Author of the blog'
@@ -63,12 +65,13 @@ export default function CreateBlog({ creationError, createRef, handleSubmit }) {
           <input
             type='text'
             name='url'
+            id='url'
             value={url}
             onChange={({ target }) => setUrl(target.value)}
             placeholder='Url of the blog'
           />
         </div>
-        <button type='submit'>create</button>
+        <button id="create-blog-btn" type='submit'>create</button>
       </form>
     </div>
   );

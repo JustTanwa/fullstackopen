@@ -36,7 +36,7 @@ export default function Login({ setUser }) {
     <div>
       <Notification message={errorMessage} messageStyle='failed' />
       <h2>Log in to Bloglist</h2>
-      <form onSubmit={handleLogin}>
+      <form id="login-form" onSubmit={handleLogin}>
         <div className='input-group'>
           <label htmlFor='username'>username</label>
           <input
@@ -57,7 +57,7 @@ export default function Login({ setUser }) {
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type='submit'>Login</button>
+        <button id="login-button" type='submit'>Login</button>
       </form>
     </div>
   );

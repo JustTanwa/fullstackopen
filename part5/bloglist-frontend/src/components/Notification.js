@@ -28,5 +28,5 @@ export default function Notification({ message, messageStyle }) {
   if (message === null) {
     return null;
   }
-  return <div style={styles[messageStyle]}>{message}</div>;
+  return <div className="notification-message" style={styles[messageStyle]}>{message}</div>;
 }
